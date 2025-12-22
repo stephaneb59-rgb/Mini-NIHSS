@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Calculateur score NIHSS</title>
+  <title>Calculateur score Mini NIHSS</title>
   <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#5b8cff">
   <style>
@@ -72,7 +72,7 @@
     <section id="questions"></section>
     <section id="summary">
       <strong>Résumé</strong>
-      <div class="sub" id="chosenCount">0/15 éléments renseignés</div>
+      <div class="sub" id="chosenCount">0/9 éléments renseignés</div>
     </section>
     <div id="finalResult" class="resultFinal" style="display:none;"></div>
   </main>
@@ -117,8 +117,8 @@
   const finalResult=document.getElementById('finalResult');
 
   function bandFrom(score){
-    if(score<=4) return {txt:'minime', cls:'ok'};
-    if(score<=15) return {txt:'modéré', cls:'warn'};
+    if(score<=3) return {txt:'minime', cls:'ok'};
+    if(score<=10) return {txt:'modéré', cls:'warn'};
     return {txt:'sévère', cls:'bad'};
   }
 
@@ -221,6 +221,7 @@ document.getElementById('installBtn').addEventListener('click', async () => {
 
 </body>
 </html>
+
 
 
 
