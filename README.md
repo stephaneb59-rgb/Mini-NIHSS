@@ -1,2 +1,1 @@
-# Mini-NIHSS
-NIHSS calculator for paramedics
+SB : stephaneb59@gmail.com
