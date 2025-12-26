@@ -64,6 +64,12 @@
     .chip { padding:8px 12px; border-radius:999px; background:var(--card); }
     .pill { font-weight:bold; }
     .ok{color:var(--ok);} .warn{color:var(--warn);} .bad{color:var(--bad);}
+
+    /* Image / plein écran / actions */
+    .img-wrap { text-align:center; margin:12px 0; }
+    .obj-img { max-width:100%; height:auto; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.12); cursor:zoom-in; }
+    .img-actions { display:flex; justify-content:center; gap:10px; margin-top:10px; }
+    .hidden-options { display:none; }
   </style>
 </head>
 <body>
@@ -114,6 +120,8 @@
     ];
 
   let currentIndex=0;
+  let lastIndex = null; // pour réinitialiser l'étape image seulement quand on entre pour la première fois
+  let imgStep = 0; // 0 = première image (objets), 1 = deuxième image (scene), 2 = afficher options
   const grid=document.getElementById('questions');
   const finalResult=document.getElementById('finalResult');
 
@@ -132,31 +140,108 @@
     const sub=document.createElement('div'); sub.className='sub'; sub.textContent=q.desc;
     const ctrl=document.createElement('div'); ctrl.className='control';
 
-    // Si on est sur la question de langage (id 4) — afficher l'image depuis la racine
-    // Condition demandée : currentIndex === 3 (question numéro 4)
+    // réinitialiser imgStep uniquement lorsqu'on arrive sur la question (pas quand on re-render pour changer étape)
+    if (currentIndex !== lastIndex) {
+      imgStep = 0;
+      lastIndex = currentIndex;
+    }
+
+    // Si on est sur la question de langage (id 4) — afficher deux images à la racine selon imgStep
     if (currentIndex === 3) {
       const imgWrap = document.createElement('div');
-      imgWrap.style.textAlign = 'center';
-      imgWrap.style.margin = '12px 0';
+      imgWrap.className = 'img-wrap';
+
+      // images list
+      const images = [
+        {src: './objets.png', alt: 'objets à décrire', title: 'Objets'},
+        {src: './scène.png', alt: 'scène', title: 'Scène'}
+      ];
+
+      // afficher l'image correspondant à imgStep (0 ou 1). Lorsque imgStep === 2, on garde la 2ème image visible.
+      const visibleImgIndex = Math.min(imgStep, 1);
       const img = document.createElement('img');
-      img.src = './objets.png';
-      img.alt = 'objets à décrire';
+      img.src = images[visibleImgIndex].src;
+      img.alt = images[visibleImgIndex].alt;
       img.id = 'objetsImage';
       img.loading = 'lazy';
-      img.style.maxWidth = '100%';
-      img.style.height = 'auto';
-      img.style.borderRadius = '12px';
-      img.style.boxShadow = '0 2px 8px rgba(0,0,0,0.12)';
+      img.className = 'obj-img';
       imgWrap.appendChild(img);
+
+      // actions sous l'image : plein écran et bouton pour passer à l'étape suivante
+      const actions = document.createElement('div');
+      actions.className = 'img-actions';
+
+      const fullscreenBtn = document.createElement('button');
+      fullscreenBtn.className = 'btn';
+      fullscreenBtn.textContent = 'Plein écran';
+      fullscreenBtn.onclick = async () => {
+        try {
+          if (img.requestFullscreen) {
+            await img.requestFullscreen();
+          } else if (img.webkitRequestFullscreen) {
+            img.webkitRequestFullscreen();
+          } else {
+            window.open(img.src, '_blank');
+          }
+        } catch (err) {
+          window.open(img.src, '_blank');
+        }
+      };
+
+      // bouton dont le libellé dépend de l'étape courante (remplacé "Suite" par "Scène à décrire")
+      const stepBtn = document.createElement('button');
+      stepBtn.className = 'btn primary';
+      if (imgStep === 0) stepBtn.textContent = 'Scène à décrire';       // passe à la 2ème image
+      else stepBtn.textContent = 'Suivant';                   // dévoile les réponses
+
+      stepBtn.onclick = () => {
+        if (imgStep === 0) {
+          imgStep = 1;
+          renderQuestion(); // re-render pour afficher la 2ème image
+        } else if (imgStep === 1) {
+          imgStep = 2;
+          // on ne re-render pas forcément nécessaire, mais on le fait pour gérer l'affichage des options
+          renderQuestion();
+          // scroller vers les options après rendu
+          setTimeout(() => {
+            const optContainer = document.querySelector('.control.options-container');
+            if (optContainer) optContainer.scrollIntoView({behavior:'smooth', block:'start'});
+          }, 50);
+        }
+      };
+
+      // cliquer sur l'image lance aussi le plein écran (UX)
+      img.onclick = () => {
+        fullscreenBtn.click();
+      };
+
+      actions.appendChild(fullscreenBtn);
+      actions.appendChild(stepBtn);
+      imgWrap.appendChild(actions);
+
       card.append(h3, sub, imgWrap);
+
+      // construire les options mais les cacher si imgStep < 2
+      ctrl.className = 'control options-container' + (imgStep < 2 ? ' hidden-options' : '');
+
     } else {
       card.append(h3, sub);
     }
 
+    // construire les boutons de réponses (toujours ajoutés au ctrl)
     q.options.forEach(opt=>{
       const b=document.createElement('button');
       b.className='seg'; b.textContent=opt.t; b.setAttribute('aria-pressed','false');
-      b.onclick=()=>{ [...ctrl.children].forEach(ch=>ch.setAttribute('aria-pressed','false')); b.setAttribute('aria-pressed','true'); q.selected=opt.v; update(); };
+      b.onclick=()=>{
+        [...ctrl.children].forEach(ch=>ch.setAttribute('aria-pressed','false'));
+        b.setAttribute('aria-pressed','true');
+        q.selected=opt.v;
+        update();
+      };
+      // si une valeur était déjà choisie auparavant, marquer le bouton comme sélectionné
+      if (q.selected !== undefined && q.selected === opt.v) {
+        b.setAttribute('aria-pressed','true');
+      }
       ctrl.appendChild(b);
     });
 
@@ -190,14 +275,14 @@
   }
 
   function showFinal(){
-    let score=0; 
+    let score=0;
     NIHSS.forEach(q=>{ if(q.selected!==undefined) score+=q.selected; });
     const {txt, cls}=bandFrom(score);
     finalResult.style.display='block';
     finalResult.innerHTML=`Score total: ${score}<br>Gravité: <span class="${cls}">${txt}</span>`;
   }
 
-  window.onload=()=>{NIHSS.forEach(q=>delete q.selected); currentIndex=0; renderQuestion(); update();}
+  window.onload=()=>{NIHSS.forEach(q=>delete q.selected); currentIndex=0; lastIndex=null; imgStep=0; renderQuestion(); update();}
 </script>
 
 <!-- Enregistrement du service worker -->
@@ -243,5 +328,6 @@ document.getElementById('installBtn').addEventListener('click', async () => {
 
 </body>
 </html>
+
 
 
