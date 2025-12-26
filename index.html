@@ -70,6 +70,7 @@
   <div class="topbar"><h1>Calcul Mini-NIHSS SB ®</h1></div>
   <main class="app">
     <section id="questions"></section>
+
     <section id="summary">
       <strong>Résumé</strong>
       <div class="sub" id="chosenCount">0/9 éléments renseignés</div>
@@ -131,6 +132,27 @@
     const sub=document.createElement('div'); sub.className='sub'; sub.textContent=q.desc;
     const ctrl=document.createElement('div'); ctrl.className='control';
 
+    // Si on est sur la question de langage (id 4) — afficher l'image depuis la racine
+    // Condition demandée : currentIndex === 3 (question numéro 4)
+    if (currentIndex === 3) {
+      const imgWrap = document.createElement('div');
+      imgWrap.style.textAlign = 'center';
+      imgWrap.style.margin = '12px 0';
+      const img = document.createElement('img');
+      img.src = './image.png';
+      img.alt = 'objets à décrire';
+      img.id = 'objetsImage';
+      img.loading = 'lazy';
+      img.style.maxWidth = '100%';
+      img.style.height = 'auto';
+      img.style.borderRadius = '12px';
+      img.style.boxShadow = '0 2px 8px rgba(0,0,0,0.12)';
+      imgWrap.appendChild(img);
+      card.append(h3, sub, imgWrap);
+    } else {
+      card.append(h3, sub);
+    }
+
     q.options.forEach(opt=>{
       const b=document.createElement('button');
       b.className='seg'; b.textContent=opt.t; b.setAttribute('aria-pressed','false');
@@ -138,7 +160,7 @@
       ctrl.appendChild(b);
     });
 
-    card.append(h3, sub, ctrl);
+    card.append(ctrl);
 
     const nav=document.createElement('div'); nav.className='control';
     if(currentIndex>0){
@@ -221,35 +243,3 @@ document.getElementById('installBtn').addEventListener('click', async () => {
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
