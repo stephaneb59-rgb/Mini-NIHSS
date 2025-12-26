@@ -83,33 +83,33 @@
 
 <script>
   const NIHSS = [
-      { id: '1a', label: '1a. Niveau de conscience', desc:'Éveil global', options:[
+      { id: '1', label: '1. Niveau de conscience', desc:'Éveil global', options:[
         {t:'Normal', v:0}, {t:'Eveillable avec stimulations simple', v:1}, {t:'Eveillable avec stimulations répétées', v:2}, {t:'Coma', v:3}
       ]},
-      { id: '1b', label: '1b. Réponses à 2 questions simples', desc:'Mois / âge', options:[
+      { id: '2', label: '2. Réponses à 2 questions simples', desc:'Mois / âge', options:[
         {t:'2 réponses correctes', v:0}, {t:'1 réponse correcte', v:1}, {t:'0 réponse correcte', v:2}
       ]},
-      { id: '1c', label: '1c. Réponses à 2 taches simples', desc:'Ouvrir et fermer les yeux / serrer et relacher la main', options:[
+      { id: '3', label: '3. Réponses à 2 taches simples', desc:'Ouvrir et fermer les yeux / serrer et relacher la main', options:[
         {t:'2 tâches correctes', v:0}, {t:'1 tâche correcte', v:1}, {t:'0 tâche correcte', v:2}
       ]},
-      { id: '5a', label: '5a. Bras gauche', desc:'Maintien 10 s', options:[
+      { id: '6a', label: '6a. Bras gauche', desc:'Maintien 10 s', options:[
         {t:'Maintenu', v:0}, {t:'Descente >10 s', v:1}, {t:'Descente <10 s', v:2}, {t:'Chute immédiate', v:3}, {t:'Aucune élévation', v:4}
       ]},
-      { id: '5b', label: '5b. Bras droit', desc:'Maintien 10 s', options:[
+      { id: '6b', label: '6b. Bras droit', desc:'Maintien 10 s', options:[
         {t:'Maintenu', v:0}, {t:'Descente >10 s', v:1}, {t:'Descente <10 s', v:2}, {t:'Chute immédiate', v:3}, {t:'Aucune élévation', v:4}
       ]},
-      { id: '6a', label: '6a. Jambe gauche', desc:'Maintien 5 s', options:[
+      { id: '7a', label: '7a. Jambe gauche', desc:'Maintien 5 s', options:[
         {t:'Maintenue', v:0}, {t:'Descente >5 s', v:1}, {t:'Descente <5 s', v:2}, {t:'Chute immédiate', v:3}, {t:'Aucune élévation', v:4}
       ]},
-      { id: '6b', label: '6b. Jambe droite', desc:'Maintien 5 s', options:[
+      { id: '7b', label: '7b. Jambe droite', desc:'Maintien 5 s', options:[
         {t:'Maintenue', v:0}, {t:'Descente >5 s', v:1}, {t:'Descente <5 s', v:2}, {t:'Chute immédiate', v:3}, {t:'Aucune élévation', v:4}
       ]},
-      { id: '9', label: '9. Langage', desc:'description objets / phrases - Aphasie', options:[
-        <img src="./objets à décrire.png" alt="illustration">
-        <img src="./phrases à lire.png alt="illustration">
+      { id: '4', label: '4. Langage', desc:'description objets / phrases - Aphasie', options:[
         {t:'Normale', v:0}, {t:'Légère', v:1}, {t:'Modérée', v:2}, {t:'Sévère / mutique', v:3}
+          <img src=/."objets à décrire.png" alt="Langage - Aphasie"
+       style="max-width:300px; display:block; margin:10px 0;">
       ]},
-      { id: '10', label: '10. Dysarthrie', desc:'Articulation et clareté parole - carte de mots', options:[
+      { id: '5', label: '5. Dysarthrie', desc:'Articulation et clareté parole - carte de mots', options:[
         {t:'Normale', v:0}, {t:'Légère', v:1}, {t:'Sévère', v:2}
       ]}
     ];
@@ -223,6 +223,7 @@ document.getElementById('installBtn').addEventListener('click', async () => {
 
 </body>
 </html>
+
 
 
 
