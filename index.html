@@ -92,6 +92,12 @@
       { id: '3', label: '3. Réponses à 2 taches simples', desc:'Ouvrir et fermer les yeux / serrer et relacher la main', options:[
         {t:'2 tâches correctes', v:0}, {t:'1 tâche correcte', v:1}, {t:'0 tâche correcte', v:2}
       ]},
+       { id: '4', label: '4. Langage', desc:'description objets / phrases - Aphasie', options:[
+        {t:'Normale', v:0}, {t:'Légère', v:1}, {t:'Modérée', v:2}, {t:'Sévère / mutique', v:3}
+      ]},
+      { id: '5', label: '5. Dysarthrie', desc:'Articulation et clareté parole - carte de mots', options:[
+        {t:'Normale', v:0}, {t:'Légère', v:1}, {t:'Sévère', v:2}
+      ]},
       { id: '6a', label: '6a. Bras gauche', desc:'Maintien 10 s', options:[
         {t:'Maintenu', v:0}, {t:'Descente >10 s', v:1}, {t:'Descente <10 s', v:2}, {t:'Chute immédiate', v:3}, {t:'Aucune élévation', v:4}
       ]},
@@ -103,13 +109,7 @@
       ]},
       { id: '7b', label: '7b. Jambe droite', desc:'Maintien 5 s', options:[
         {t:'Maintenue', v:0}, {t:'Descente >5 s', v:1}, {t:'Descente <5 s', v:2}, {t:'Chute immédiate', v:3}, {t:'Aucune élévation', v:4}
-      ]},
-      { id: '4', label: '4. Langage', desc:'description objets / phrases - Aphasie', options:[
-        {t:'Normale', v:0}, {t:'Légère', v:1}, {t:'Modérée', v:2}, {t:'Sévère / mutique', v:3}
-      ]},
-      { id: '5', label: '5. Dysarthrie', desc:'Articulation et clareté parole - carte de mots', options:[
-        {t:'Normale', v:0}, {t:'Légère', v:1}, {t:'Sévère', v:2}
-      ]}
+       ]}
     ];
 
   let currentIndex=0;
@@ -221,6 +221,7 @@ document.getElementById('installBtn').addEventListener('click', async () => {
 
 </body>
 </html>
+
 
 
 
