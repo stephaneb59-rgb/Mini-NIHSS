@@ -120,8 +120,8 @@
     ];
 
   let currentIndex=0;
-  let lastIndex = null; // pour réinitialiser l'étape image seulement quand on entre pour la première fois
-  let imgStep = 0; // 0 = première image (objets), 1 = deuxième image (scene), 2 = afficher options
+  // map index -> step (0 = first image, 1 = second image, 2 = reveal options)
+  const imgSteps = {};
   const grid=document.getElementById('questions');
   const finalResult=document.getElementById('finalResult');
 
@@ -140,34 +140,28 @@
     const sub=document.createElement('div'); sub.className='sub'; sub.textContent=q.desc;
     const ctrl=document.createElement('div'); ctrl.className='control';
 
-    // réinitialiser imgStep uniquement lorsqu'on arrive sur la question (pas quand on re-render pour changer étape)
-    if (currentIndex !== lastIndex) {
-      imgStep = 0;
-      lastIndex = currentIndex;
-    }
+    // init step for this question if absent
+    if (imgSteps[currentIndex] === undefined) imgSteps[currentIndex] = 0;
+    const step = imgSteps[currentIndex];
 
-    // Si on est sur la question de langage (id 4) — afficher deux images à la racine selon imgStep
+    // --- question 4 : objets -> scène (indices 3) ---
     if (currentIndex === 3) {
       const imgWrap = document.createElement('div');
       imgWrap.className = 'img-wrap';
 
-      // images list
       const images = [
         {src: './objets.png', alt: 'objets à décrire', title: 'Objets'},
-        {src: './scène.png', alt: 'scène', title: 'Scène'}
+        {src: './scene.png', alt: 'scène', title: 'Scène'}
       ];
 
-      // afficher l'image correspondant à imgStep (0 ou 1). Lorsque imgStep === 2, on garde la 2ème image visible.
-      const visibleImgIndex = Math.min(imgStep, 1);
+      const visibleImgIndex = Math.min(step, 1);
       const img = document.createElement('img');
       img.src = images[visibleImgIndex].src;
       img.alt = images[visibleImgIndex].alt;
-      img.id = 'objetsImage';
       img.loading = 'lazy';
       img.className = 'obj-img';
       imgWrap.appendChild(img);
 
-      // actions sous l'image : plein écran et bouton pour passer à l'étape suivante
       const actions = document.createElement('div');
       actions.className = 'img-actions';
 
@@ -176,33 +170,24 @@
       fullscreenBtn.textContent = 'Plein écran';
       fullscreenBtn.onclick = async () => {
         try {
-          if (img.requestFullscreen) {
-            await img.requestFullscreen();
-          } else if (img.webkitRequestFullscreen) {
-            img.webkitRequestFullscreen();
-          } else {
-            window.open(img.src, '_blank');
-          }
-        } catch (err) {
-          window.open(img.src, '_blank');
-        }
+          if (img.requestFullscreen) await img.requestFullscreen();
+          else if (img.webkitRequestFullscreen) img.webkitRequestFullscreen();
+          else window.open(img.src, '_blank');
+        } catch (err) { window.open(img.src, '_blank'); }
       };
 
-      // bouton dont le libellé dépend de l'étape courante (remplacé "Suite" par "Scène à décrire")
       const stepBtn = document.createElement('button');
       stepBtn.className = 'btn primary';
-      if (imgStep === 0) stepBtn.textContent = 'Scène à décrire';       // passe à la 2ème image
-      else stepBtn.textContent = 'Suivant';                   // dévoile les réponses
+      if (step === 0) stepBtn.textContent = 'Scène à décrire';
+      else stepBtn.textContent = 'Suivant';
 
       stepBtn.onclick = () => {
-        if (imgStep === 0) {
-          imgStep = 1;
-          renderQuestion(); // re-render pour afficher la 2ème image
-        } else if (imgStep === 1) {
-          imgStep = 2;
-          // on ne re-render pas forcément nécessaire, mais on le fait pour gérer l'affichage des options
+        if (imgSteps[currentIndex] === 0) {
+          imgSteps[currentIndex] = 1;
           renderQuestion();
-          // scroller vers les options après rendu
+        } else if (imgSteps[currentIndex] === 1) {
+          imgSteps[currentIndex] = 2;
+          renderQuestion();
           setTimeout(() => {
             const optContainer = document.querySelector('.control.options-container');
             if (optContainer) optContainer.scrollIntoView({behavior:'smooth', block:'start'});
@@ -210,22 +195,77 @@
         }
       };
 
-      // cliquer sur l'image lance aussi le plein écran (UX)
-      img.onclick = () => {
-        fullscreenBtn.click();
-      };
+      img.onclick = () => { fullscreenBtn.click(); };
 
       actions.appendChild(fullscreenBtn);
       actions.appendChild(stepBtn);
       imgWrap.appendChild(actions);
-
       card.append(h3, sub, imgWrap);
 
-      // construire les options mais les cacher si imgStep < 2
-      ctrl.className = 'control options-container' + (imgStep < 2 ? ' hidden-options' : '');
+      ctrl.className = 'control options-container' + (step < 2 ? ' hidden-options' : '');
+    }
+    // --- question 5 : mots -> phrases (indices 4) ---
+    else if (currentIndex === 4) {
+      const imgWrap = document.createElement('div');
+      imgWrap.className = 'img-wrap';
 
+      const images = [
+        {src: './mots.png', alt: 'carte de mots', title: 'Mots'},
+        {src: './phrases.png', alt: 'phrases à lire', title: 'Phrases'}
+      ];
+
+      const visibleImgIndex = Math.min(step, 1);
+      const img = document.createElement('img');
+      img.src = images[visibleImgIndex].src;
+      img.alt = images[visibleImgIndex].alt;
+      img.loading = 'lazy';
+      img.className = 'obj-img';
+      imgWrap.appendChild(img);
+
+      const actions = document.createElement('div');
+      actions.className = 'img-actions';
+
+      const fullscreenBtn = document.createElement('button');
+      fullscreenBtn.className = 'btn';
+      fullscreenBtn.textContent = 'Plein écran';
+      fullscreenBtn.onclick = async () => {
+        try {
+          if (img.requestFullscreen) await img.requestFullscreen();
+          else if (img.webkitRequestFullscreen) img.webkitRequestFullscreen();
+          else window.open(img.src, '_blank');
+        } catch (err) { window.open(img.src, '_blank'); }
+      };
+
+      const stepBtn = document.createElement('button');
+      stepBtn.className = 'btn primary';
+      if (step === 0) stepBtn.textContent = 'Phrases à lire';
+      else stepBtn.textContent = 'Suivant';
+
+      stepBtn.onclick = () => {
+        if (imgSteps[currentIndex] === 0) {
+          imgSteps[currentIndex] = 1;
+          renderQuestion();
+        } else if (imgSteps[currentIndex] === 1) {
+          imgSteps[currentIndex] = 2;
+          renderQuestion();
+          setTimeout(() => {
+            const optContainer = document.querySelector('.control.options-container');
+            if (optContainer) optContainer.scrollIntoView({behavior:'smooth', block:'start'});
+          }, 50);
+        }
+      };
+
+      img.onclick = () => { fullscreenBtn.click(); };
+
+      actions.appendChild(fullscreenBtn);
+      actions.appendChild(stepBtn);
+      imgWrap.appendChild(actions);
+      card.append(h3, sub, imgWrap);
+
+      ctrl.className = 'control options-container' + (step < 2 ? ' hidden-options' : '');
     } else {
       card.append(h3, sub);
+      ctrl.className = 'control';
     }
 
     // construire les boutons de réponses (toujours ajoutés au ctrl)
@@ -238,7 +278,6 @@
         q.selected=opt.v;
         update();
       };
-      // si une valeur était déjà choisie auparavant, marquer le bouton comme sélectionné
       if (q.selected !== undefined && q.selected === opt.v) {
         b.setAttribute('aria-pressed','true');
       }
@@ -275,14 +314,14 @@
   }
 
   function showFinal(){
-    let score=0;
+    let score=0; 
     NIHSS.forEach(q=>{ if(q.selected!==undefined) score+=q.selected; });
     const {txt, cls}=bandFrom(score);
     finalResult.style.display='block';
     finalResult.innerHTML=`Score total: ${score}<br>Gravité: <span class="${cls}">${txt}</span>`;
   }
 
-  window.onload=()=>{NIHSS.forEach(q=>delete q.selected); currentIndex=0; lastIndex=null; imgStep=0; renderQuestion(); update();}
+  window.onload=()=>{NIHSS.forEach(q=>delete q.selected); currentIndex=0; renderQuestion(); update();}
 </script>
 
 <!-- Enregistrement du service worker -->
