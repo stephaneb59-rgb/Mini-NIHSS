@@ -189,10 +189,10 @@
     // --- question 4 : objets -> scène (index 3) ---
     if (currentIndex === 3) {
       const imgWrap = document.createElement('div'); imgWrap.className = 'img-wrap';
-      // NB: filename in repo is "scène.png" (accent). makeRobustImage handles encoding.
+      // NB: filename in repo is "scene.png" (accent). makeRobustImage handles encoding.
       const images = [
         {src: './objets.png', alt: 'objets à décrire', title: 'Objets'},
-        {src: './scène.png', alt: 'scène', title: 'Scène'}
+        {src: './scene.png', alt: 'scène', title: 'Scène'}
       ];
       const visibleImgIndex = Math.min(step, 1);
       const img = makeRobustImage(images[visibleImgIndex].src, images[visibleImgIndex].alt);
@@ -394,6 +394,7 @@ document.getElementById('installBtn').addEventListener('click', async () => {
 
 </body>
 </html>
+
 
 
 
