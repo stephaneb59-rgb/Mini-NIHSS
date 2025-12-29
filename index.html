@@ -186,43 +186,55 @@
     if (imgSteps[currentIndex] === undefined) imgSteps[currentIndex] = 0;
     const step = imgSteps[currentIndex];
 
-// --- question 4 : objets -> scène (index 3) ---
-if (currentIndex === 3) {
-  const imgWrap = document.createElement('div');
-  imgWrap.className = 'img-wrap';
+    // --- question 4 : objets -> scène (index 3) ---
+    if (currentIndex === 3) {
+      const imgWrap = document.createElement('div'); imgWrap.className = 'img-wrap';
+      // NB: filename in repo is "scene.png" (accent). makeRobustImage handles encoding.
+      const images = [
+        {src: './objets.png', alt: 'objets à décrire', title: 'Objets'},
+        {src: './scene.png', alt: 'scene', title: 'Scène'}
+      ];
+      const visibleImgIndex = Math.min(step, 1);
+      const img = makeRobustImage(images[visibleImgIndex].src, images[visibleImgIndex].alt);
+      imgWrap.appendChild(img);
 
-  const images = [
-    {src: './objets.png', alt: 'objets à décrire', title: 'Objets'},
-    {src: './scene.png', alt: 'scène', title: 'Scène'}
-  ];
+      const actions = document.createElement('div'); actions.className = 'img-actions';
+      const fullscreenBtn = document.createElement('button'); fullscreenBtn.className = 'btn'; fullscreenBtn.textContent = 'Plein écran';
+      fullscreenBtn.onclick = async () => {
+        try {
+          if (img.requestFullscreen) await img.requestFullscreen();
+          else if (img.webkitRequestFullscreen) img.webkitRequestFullscreen();
+          else window.open(img.src, '_blank');
+        } catch (err) {
+          window.open(img.src, '_blank');
+        }
+      };
 
-  const visibleImgIndex = Math.min(step, 1);
-  const img = makeRobustImage(images[visibleImgIndex].src, images[visibleImgIndex].alt);
-  imgWrap.appendChild(img);
+      const stepBtn = document.createElement('button'); stepBtn.className = 'btn primary';
+      stepBtn.textContent = step === 0 ? 'Scène à décrire' : 'Suivant';
+      stepBtn.onclick = () => {
+        if (imgSteps[currentIndex] === 0) {
+          imgSteps[currentIndex] = 1;
+          renderQuestion();
+        } else if (imgSteps[currentIndex] === 1) {
+          imgSteps[currentIndex] = 2;
+          renderQuestion();
+          setTimeout(() => {
+            const optContainer = document.querySelector('.control.options-container');
+            if (optContainer) optContainer.scrollIntoView({behavior:'smooth', block:'start'});
+          }, 50);
+        }
+      };
 
-  const actions = document.createElement('div');
-  actions.className = 'img-actions';
+      img.onclick = () => fullscreenBtn.click();
 
-  const fullscreenBtn = document.createElement('button');
-  fullscreenBtn.className = 'btn';
-  fullscreenBtn.textContent = 'Plein écran';
-  fullscreenBtn.onclick = async () => {
-    try {
-      if (img.requestFullscreen) await img.requestFullscreen();
-      else if (img.webkitRequestFullscreen) img.webkitRequestFullscreen();
-      else window.open(img.src, '_blank');
-    } catch (err) {
-      window.open(img.src, '_blank');
+      actions.appendChild(fullscreenBtn);
+      actions.appendChild(stepBtn);
+      imgWrap.appendChild(actions);
+      card.append(h3, sub, imgWrap);
+
+      ctrl.className = 'control options-container' + (step < 2 ? ' hidden-options' : '');
     }
-  };
-
-  // Suppression du bouton "Suivant" ou "Scène à décrire"
-  actions.appendChild(fullscreenBtn);
-  imgWrap.appendChild(actions);
-  card.append(h3, sub, imgWrap);
-
-  ctrl.className = 'control options-container' + (step < 2 ? ' hidden-options' : '');
-}
     // --- question 5 : mots -> phrases (index 4) ---
     else if (currentIndex === 4) {
       const imgWrap = document.createElement('div'); imgWrap.className = 'img-wrap';
@@ -382,6 +394,14 @@ document.getElementById('installBtn').addEventListener('click', async () => {
 
 </body>
 </html>
+
+
+
+
+
+
+
+
 
 
 
