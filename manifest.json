@@ -1,6 +1,6 @@
 {
-  "name": "Calculateur Mini NIHSS",
-  "short_name": "Mini NIHSS",
+  "name": "Calculateur Mini-NIHSS",
+  "short_name": "Mini-NIHSS",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
@@ -20,11 +20,14 @@
   ],
   "screenshots": [
     {
-      "src": "./screenshot.png",
+      "src": "./screenshot1.png",
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide"
     }
   ]
 }
+  ]
+}
+
 
