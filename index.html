@@ -113,7 +113,7 @@
 <script>
   const NIHSS = [
       { id: '1', label: '1. Niveau de conscience', desc:'Éveil global', options:[
-        {t:'Vigilant', v:0}, {t:'Répond aux stimulations simples', v:1}, {t:'Réponse motice non stéréotypée à la douleur', v:2}, {t:'Coma', v:3}
+        {t:'Vigilant', v:0}, {t:'Répond aux stimulations simples', v:1}, {t:'Réponse motrice non stéréotypée à la douleur', v:2}, {t:'Coma', v:3}
       ]},
       { id: '2', label: '2. Réponses à 2 questions simples', desc:'Questions : âge / mois', options:[
         {t:'2 bonnes réponses', v:0}, {t:'1 bonne réponse ou dysarthrie sévère ', v:1}, {t:'0 bonne réponse ou aphasie', v:2}
@@ -122,22 +122,22 @@
         {t:'2 bonnes réponses', v:0}, {t:'1 bonne réponse', v:1}, {t:'0 bonne réponse', v:2}
       ]},
       { id: '4', label: '4. Langage - Aphasie', desc:'Description objets - scène - lecture de phrases', options:[
-        {t:'Absente', v:0}, {t:'Aphasie mais communique', v:1}, {t:'Aphasie sévère : Communication quasi impossible', v:2}, {t:'Mutique', v:3}
+        {t:'Absente', v:0}, {t:'Aphasie mais communique', v:1}, {t:'Aphasie sévère : Communication quasi impossible', v:2}, {t:'mutique : n’execute aucun ordre simple', v:3}
       ]},
       { id: '5', label: '5. Dysarthrie', desc:'Articulation et clareté parole - carte de mots', options:[
         {t:'Absente', v:0}, {t:'Compréhensible : Minime à modérée', v:1}, {t:'Incompréhensible : Sévère-mutique', v:2}
       ]},
-      { id: '6', label: '6. Élevation du Mb supérieur (en 1er le coté non parétique)', desc:'Assis bras tendu à 90° - allongé bras tendu à 45° : Maintien 10s ', options:[
-        {t:'Maintenu 10s', v:0}, {t:'Résiste à la pesenteur', v:1}, {t:'Ne résite pas à la peusanteur', v:2}, {t:'Ne lève pas', v:3}, {t:'Aucun mouvement', v:4}
+      { id: '6', label: '6. Élevation du Mb supérieur droit', desc:'Assis bras tendu à 90° - allongé bras tendu à 45° : Maintien 10s ', options:[
+        {t:'Maintenu 10s', v:0}, {t:'Résiste à la pesenteur', v:1}, {t:'Ne résite pas à la pesanteur', v:2}, {t:'Ne lève pas', v:3}, {t:'Aucun mouvement', v:4}
       ]},
-      { id: '7', label: '7. Elévation Mb supérieur controlatéral', desc:'Assis bras tendu à 90° - allongé bras tendu à 45° : Maintien 10s', options:[
-        {t:'Maintenu 10s', v:0}, {t:'Résiste à la pesenteur', v:1}, {t:'Ne résite pas à la peusanteur', v:2}, {t:'Ne lève pas', v:3}, {t:'Aucun mouvement', v:4}
+      { id: '7', label: '7. Elévation Mb supérieur gauche', desc:'Assis bras tendu à 90° - allongé bras tendu à 45° : Maintien 10s', options:[
+        {t:'Maintenu 10s', v:0}, {t:'Résiste à la pesenteur', v:1}, {t:'Ne résite pas à la pesanteur', v:2}, {t:'Ne lève pas', v:3}, {t:'Aucun mouvement', v:4}
       ]},
-      { id: '8', label: '8. Élevation du Mb inférieur (en 1er le coté non parétique)', desc:'Allongé jambe tendue à 30° : Maintien 5s', options:[
-        {t:'Maintenu 5s', v:0}, {t:'Résiste à la pesenteur', v:1}, {t:'Ne résite pas à la peusanteur', v:2}, {t:'Ne lève pas', v:3}, {t:'Aucun mouvement', v:4}
+      { id: '8', label: '8. Élevation du Mb inférieur droit', desc:'Allongé jambe tendue à 30° : Maintien 5s', options:[
+        {t:'Maintenu 5s', v:0}, {t:'Résiste à la pesenteur', v:1}, {t:'Ne résite pas à la pesanteur', v:2}, {t:'Ne lève pas', v:3}, {t:'Aucun mouvement', v:4}
       ]},
-      { id: '9', label: '9. Elévation Mb inférieur controlatéral', desc:'Allongé jambe tendue à 30° : Maintien 5s', options:[
-        {t:'Maintenu 5s', v:0}, {t:'Résiste à la pesenteur', v:1}, {t:'Ne résite pas à la peusanteur', v:2}, {t:'Ne lève pas', v:3}, {t:'Aucun mouvement', v:4}
+      { id: '9', label: '9. Elévation Mb inférieur gauche', desc:'Allongé jambe tendue à 30° : Maintien 5s', options:[
+        {t:'Maintenu 5s', v:0}, {t:'Résiste à la pesenteur', v:1}, {t:'Ne résite pas à la pesanteur', v:2}, {t:'Ne lève pas', v:3}, {t:'Aucun mouvement', v:4}
       ]} 
       ];
 
@@ -411,6 +411,7 @@
 
 </body>
 </html>
+
 
 
 
